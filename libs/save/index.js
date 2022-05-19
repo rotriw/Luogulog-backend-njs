@@ -3,11 +3,11 @@ const { time } = require("console");
 const https = require("https");
 const { config } = require("process");
 
-exports.savePageCommit = async function (pageID, page, config) {
+exports.savePageCommit = async function (postID, page, config) {
 	return new Promise(resolve => {
 		axios({
 			method: 'get',
-			url: 'http://luogu.com.cn/discuss/' + pageID + "?page=" + page,
+			url: 'http://luogu.com.cn/discuss/' + postID + "?page=" + page,
 			headers: {
 				"cookie": config.request.cookie,
 				"user-agent": config.request.user_agent,
@@ -15,7 +15,7 @@ exports.savePageCommit = async function (pageID, page, config) {
 		})
 			.then(res => {
 				const deals = require("./deal");
-				deals(res.data, pageID, (value) => {
+				deals(res.data, postID, (value) => {
 					value.webstatus = res.status;
 					resolve(value);
 				});
@@ -30,7 +30,7 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-exports.saveWholePageCommit = async function (pageID, config) {
+exports.saveWholePageCommit = async function (postID, config) {
 	var i = 0;
 	var now = [];
 	let delayTimeError = config.time_interval.delay_time_error || 20000;
@@ -43,7 +43,7 @@ exports.saveWholePageCommit = async function (pageID, config) {
 	let here;
 	do {
 		i++;
-		here = await this.savePageCommit(pageID, i, config);
+		here = await this.savePageCommit(postID, i, config);
 		if (here.info == "0") {
 			flag = true;
 			await sleep(delayTimeError);

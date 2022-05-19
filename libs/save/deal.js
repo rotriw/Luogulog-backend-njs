@@ -1,4 +1,4 @@
-exports.default = async function (domString, pageID, callback) {
+exports.default = async function (domString, postID, callback) {
 	let discussCommit = [];
 	let $ = require("cheerio").load(domString);
 	let _i = 0;
@@ -8,7 +8,7 @@ exports.default = async function (domString, pageID, callback) {
 			return;
 		}
 		discussCommit[_i - 1] = {};
-		discussCommit[_i - 1].PostID = pageID;
+		discussCommit[_i - 1].PostID = postID;
 		discussCommit[_i - 1].authorID = $(el).find("a").first().attr("href").slice(6);
 		_i++;
 	});

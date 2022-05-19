@@ -1,0 +1,23 @@
+target = "https://www.luogu.com.cn/api/discuss?forum=relevantaffairs&page=1"
+
+[time_interval]
+mainpage = 30
+delat_time_normal = 500
+delay_time_error = 1000
+
+[database]
+url = "xxx"
+name = "luogulo"
+
+[request]
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
+cookie = ""
+host = "www.luogu.com.cn"
+
+[http]
+port = 9000
+access_origin = "*"
+
+[functions]
+autosave = false
+web = true
