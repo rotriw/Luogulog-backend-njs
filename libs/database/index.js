@@ -6,7 +6,7 @@ exports.connect = function (config) {
 			if (err) {
 				resolve({ "info": "0", "error": err });
 			}
-			return db;
+			resolve({ "info": "1", "db": db });
 		});
 	});
 };
@@ -19,7 +19,6 @@ exports.findDatainColl = function (coll, finds = {}) {
 				return;
 			}
 			resolve({ "info": "1", results });
-			db.close();
 		});
 	});
 };

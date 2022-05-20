@@ -1,5 +1,8 @@
 /node_modules
 /build
 /test.js
+/dist
 
 config.toml
+
+test2.js
