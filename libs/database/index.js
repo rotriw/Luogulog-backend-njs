@@ -34,3 +34,7 @@ exports.findDatainCollWithPage = function (coll, PostID, pages, pageN) {
 		});
 	});
 };
+
+exports.getStatus = async function (coll) {
+	return coll.count();
+}

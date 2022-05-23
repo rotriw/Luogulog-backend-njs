@@ -44,7 +44,7 @@ exports.updatePage = async function (db, postID, config, logger) {
 		// 直接从提前10页的位置
 		newPageData = await save.getFromPage(postID, config, true, Math.max(lastCommitPage - 5, 1));
 	} else { // 说明五页内有，但是懒得找到底是哪页捏，所以我也不知道。
-		newPageData = await save.getFromPage(postID, config, true, Math.max(lastCommitPage - 2, 1));
+		newPageData = last5PageCommit;;
 	}
 	let oldData = await Ccoll.find({ "PostID": postID }).toArray();
 	let len_2 = newPageData.data.length;
