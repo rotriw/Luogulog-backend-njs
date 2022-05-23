@@ -22,3 +22,15 @@ exports.findDatainColl = function (coll, finds = {}) {
 		});
 	});
 };
+
+exports.findDatainCollWithPage = function (coll, PostID, pages, pageN) {
+	return new Promise(resolve => {
+		coll.find({ "PostID": PostID }).limit(pageN).skip((pages - 1) * pageN).toArray(function (err, results) {
+			if (err) {
+				resolve({ "info": "0", "error": err });
+				return;
+			}
+			resolve({ "info": "1", results });
+		});
+	});
+};

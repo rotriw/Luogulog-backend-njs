@@ -19,5 +19,7 @@ exports.insertAllPage = async function (db, postID, config) {
 	}
 	val.describe.data.pages = val.count;
 	collDiscuss.insertOne(val.describe.data);
-	collCommit.insertMany(val.data);
+	if (val.data.length > 0) {
+		collCommit.insertMany(val.data);
+	}
 };

@@ -47,6 +47,7 @@ exports.getPageDescribe = async function (domString, postID, callback) {
 	let timeh = /[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/.exec(tl.text());
 	discussD.sendTime = new Date(timeh[0]).getTime();
 	_i = 0;
+	discussD.content = $(".am-comment-bd").first().html();
 	callback({
 		"info": "1",
 		"data": discussD

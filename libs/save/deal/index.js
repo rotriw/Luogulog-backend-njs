@@ -3,6 +3,7 @@ const { time } = require("console");
 const https = require("https");
 const { ExplainVerbosity } = require("mongodb");
 const { config } = require("process");
+const { stringify } = require("querystring");
 
 exports.getPageDescribe = async function (postID, page, config) {
 	return new Promise(resolve => {
@@ -63,7 +64,6 @@ function sleep(ms) {
 
 exports.getWholePageCommit = async function (postID, config, withTitle = false) {
 	var i = 0;
-	var now = [];
 	let delayTimeError = config.time_interval.delay_time_error || 20000;
 	let delayTime = config.time_interval.delay_time_normal || 500;
 	var result = {
@@ -72,21 +72,27 @@ exports.getWholePageCommit = async function (postID, config, withTitle = false) 
 	};
 	let flag = false;
 	let here;
-	do {
-		i++;
-		here = await this.getPageCommit(postID, i, config, (withTitle && i == 1));
-		if (here.info == "0") {
-			flag = true;
-			await sleep(delayTimeError);
-		} else {
-			flag = false;
-			result.data = result.data.concat(here.data);
-		}
-		if (withTitle && i == 1) {
-			result.describe = here.describe;
-		}
+	try {
+		do {
+			i++;
+			here = await this.getPageCommit(postID, i, config, (withTitle && i == 1));
+			if (here.info == "0") {
+				flag = true;
+				await sleep(delayTimeError);
+				continue;
+			} else {
+				flag = false;
+				result.data = result.data.concat(here.data);
+			}
+			if (withTitle && i == 1) {
+				result.describe = here.describe;
+			}
+			await sleep(delayTime);
+		} while (here.data.length || flag);
+	} catch (err) {
 		await sleep(delayTime);
-	} while (here.data.length || flag);
+		return result;
+	}
 	result.count = i;
 	return result;
 };
@@ -102,6 +108,7 @@ exports.getSomePageCommit = async function (postID, config, startPage, endPage, 
 	};
 	let flag = false;
 	let here;
+	try {
 	for (var i = startPage; i <= endPage; i++) {
 		here = await this.getPageCommit(postID, i, config, (withTitle && i == 1));
 		if (here.info == "0") {
@@ -113,6 +120,10 @@ exports.getSomePageCommit = async function (postID, config, startPage, endPage, 
 		}
 		await sleep(delayTime);
 	}
+} catch (err) {
+	await sleep(delayTime);
+	return result;
+}
 	result.count = i;
 	return result;
 };
@@ -128,23 +139,33 @@ exports.getFromPage = async function (postID, config, withTitle = false, page) {
 	};
 	let flag = false;
 	let here;
-	i = page - 1;
-	do {
-		i++;
-		here = await this.getPageCommit(postID, i, config, (withTitle && i == 1));
-		if (here.info == "0") {
-			flag = true;
-			await sleep(delayTimeError);
-			break;
-		} else {
-			flag = false;
-			result.data = result.data.concat(here.data);
-		}
-		if (withTitle && i == 1) {
-			result.describe = here.describe;
-		}
-		await sleep(delayTime);
-	} while (here.data.length || flag);
+	i = page - 1;	
+	try {
+		do {
+			i++;
+			here = await this.getPageCommit(postID, i, config, (withTitle && i == page));
+			if (here.info == "0") {
+				flag = true;
+				i--;
+				await sleep(delayTimeError);
+				break;
+			} else {
+				flag = false;
+				result.data = result.data.concat(here.data);
+			}
+			if (withTitle && i == page) {
+				result.describe = here.describe;
+			}
+			await sleep(delayTime);
+			if (typeof here.data == "string") {
+				i--;
+				continue;
+			}
+		} while (here.data.length || flag);
+	} catch (err) {
+		await sleep(delayTimeError);
+		return await exports.getFromPage(postID, config, withTitle, page);
+	}
 	result.count = i;
 	return result;
 };
