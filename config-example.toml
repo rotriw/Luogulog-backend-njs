@@ -19,5 +19,12 @@ port = 9000
 access_origin = "*"
 
 [functions]
-autosave = false
+autosave = true
 web = true
+
+protect = false
+
+# Local Save.
+[localSave]
+path = ""
+enable = true
