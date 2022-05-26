@@ -28,7 +28,9 @@ exports.getPageDescribe = async function (postID, page, config) {
 	});
 };
 
-exports.getPageCommit = async function (postID, page, config, withTitle) {
+exports.getPageCommit = async function (postID, page, config, withTitle, logger) {
+	//let a = Data.now();
+	
 	return new Promise(resolve => {
 		axios({
 			method: 'get',
@@ -39,11 +41,13 @@ exports.getPageCommit = async function (postID, page, config, withTitle) {
 			}
 		})
 			.then(res => {
+		//		console.log((Data.now() - a)+"ms")
 				const deals = require("./deal");
-				deals.default(res.data, postID, (value) => {
+				let cheerLoad = require("cheerio").load(res.data);
+				deals.default(cheerLoad, postID, logger, (value) => {
 					value.webstatus = res.status;
 					if (withTitle == true) {
-						deals.getPageDescribe(res.data, postID, (value2) => {
+						deals.getPageDescribe(cheerLoad, postID, (value2) => {
 							value.describe = value2;
 							resolve(value);
 						});
@@ -157,9 +161,9 @@ exports.getFromPage = async function (postID, config, withTitle = false, page) {
 				result.describe = here.describe;
 			}
 			await sleep(delayTime);
+		//	console.log(here.data);
 			if (typeof here.data == "string") {
-				i--;
-				continue;
+				break;
 			}
 		} while (here.data.length || flag);
 	} catch (err) {

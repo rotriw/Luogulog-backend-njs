@@ -1,20 +1,23 @@
-exports.default = async function (domString, postID, callback) {
+exports.default = async function (cheers, postID, logger, callback) {
+	
 	let discussCommit = [];
-	let $ = require("cheerio").load(domString);
+	let $ = cheers;
 	let _i = 0;
 	$(".am-comment-meta").each(function (idx, el) {
 		if (_i == 0) {
 			_i++;
 			return;
 		}
-		discussCommit[_i - 1] = {};
-		discussCommit[_i - 1].PostID = postID;
-		discussCommit[_i - 1].authorID = $(el).find("a").first().attr("href").slice(6);
-		discussCommit[_i - 1].authorName = $(el).find("a").first().text();
-		let timeh = /[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/.exec($(el).text());
+		
+		discussCommit[_i - 1] = {}; 
+		discussCommit[_i - 1].PostID = postID; 
+		; discussCommit[_i - 1].authorID = $(el).find("a").first().attr("href").slice(6);
+		; discussCommit[_i - 1].authorName = $(el).find("a").first().text();
+		; let timeh = /[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/.exec($(el).text());
 		discussCommit[_i - 1].sendTime = new Date(timeh[0]).getTime();
-		_i++;
+		_i++; 
 	});
+	
 	_i = 0;
 	$(".am-comment-bd").each(function (idx, el) {
 		if (_i == 0) {
@@ -26,7 +29,7 @@ exports.default = async function (domString, postID, callback) {
 		}
 		discussCommit[_i - 1].content = $(el).html();
 		_i++;
-	});
+	}); 
 	callback({
 		"info": "1",
 		"data": discussCommit
@@ -34,11 +37,11 @@ exports.default = async function (domString, postID, callback) {
 	return;
 };
 
-exports.getPageDescribe = async function (domString, postID, callback) {
+exports.getPageDescribe = async function (cheers, postID, callback) {
 	let discussD = {
 		postID: postID
 	};
-	let $ = require("cheerio").load(domString);
+	let $ = cheers;
 	let _i = 0;
 	let tl = $(".am-comment-meta").first();
 	discussD.title = $("h1").first().text();
