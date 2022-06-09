@@ -10,12 +10,15 @@ app.get("/", (req, res) => {
 
 var newsession, config;
 
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })) 
 
-app.get("*", (req, res, next) => {
+app.all("*", (req, res, next) => {
 	res.header("Access-Control-Allow-Origin", config.http.access_origin);
-	res.header('Access-Control-Allow-Headers', 'Content-Type');
+	res.header('Access-Control-Allow-Headers', '*');
 	res.header('Access-Control-Allow-Methods', '*');
 	res.header('Content-Type', 'application/json;charset=utf-8');
+	console.log("2333");
 	next();
 })
 
@@ -31,8 +34,19 @@ app.get("/api/discuss/title/[0-9]{1,30}", async (req, res) => {
 	res.json(result);
 });
 
-let times = 1;
+app.get("/api/user/luogu/start", async (req, res) => {
+	const luoguv = require("../libs/luoguver")
+	res.json(await luoguv.startNewLoginRequest(newsession, config))
+})
 
+app.post("/api/user/luogu/vertify", async (req, res) => {
+	const luoguv = require("../libs/luoguver");
+	console.log(req.body)
+	res.json(await luoguv.veritfyLoginRequest(req.body.pasteid, newsession, config));
+	//res.json(await luoguv.veritfyLoginRequest(newsession, config));
+})
+
+let times = 1;
 /**
  * 
  * @param {*} config 

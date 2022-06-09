@@ -8,29 +8,28 @@ const mongoC = require("mongodb").MongoClient;
  */
 exports.updatePage = async function (db, postID, config, logger) {
 	logger.info("Start Fetch " + postID);
+	
 	var dbo = db.db(config.database.name);
 	// 先来找找最后评论在哪里
 	var Dcoll = dbo.collection("discuss");
-
-	let existJudge = await Dcoll.find({ "postID": postID }).count();
-
+	
+	let findResult2 = await Dcoll.findOne({ "postID": postID });
+	
 	//(existJudge);
 	//console.log("wow");
-	if (existJudge == 0) {
+	if (findResult2 == null) {
 		await insertAllPage(db, postID, config);
-		logger.info("End Fetch " + postID);
+		logger.info("End Fetch With new insert " + postID);
 		return;
 	}
 	//console.log("2");
 	var Ccoll = dbo.collection("commit");
 	let findResult = await Ccoll.find({ "PostID": postID }).sort({ sendTime: -1 }).limit(10).toArray();
-	let findResult2 = await Dcoll.findOne({ "postID": postID });
-
-	
 	//console.log(findResult2);
 	let lastCommitPage = findResult2.pages || 1;
 	let flag = false;
 	let last5PageCommit = await save.getSomePageCommit(postID, config, Math.max(lastCommitPage - 2, 1), lastCommitPage);
+
 	var i = -1, endi = findResult.length;
 	let ts = last5PageCommit.data;
 	let len_ = last5PageCommit.data.length;

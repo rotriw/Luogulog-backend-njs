@@ -35,7 +35,7 @@ exports.savePages = async function (db, config, logger) {
 	for (var i = 0; i < len_; i ++ ) {
 		element = getData[i];
 		if (config.request.fastmode == true) {
-			save.update.updatePage(db, element.PostID, config, logger); await sleep(1000);}
+			save.update.updatePage(db, element.PostID, config, logger); await sleep(config.time_interval.delay_send);}
 		else await save.update.updatePage(db, element.PostID, config, logger);
 	}
 	logger.info("Fetched Request Ending.")

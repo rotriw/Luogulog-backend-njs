@@ -7,6 +7,9 @@
     "author": "RotriwDev",
     "license": "MIT",
     "devDependencies": {},
+    "scripts": {
+        "server": "node index.js"
+    },
     "dependencies": {
         "axios": "^0.27.2",
         "chalk": "4",
@@ -17,6 +20,7 @@
         "minimist": "^1.2.6",
         "moment": "^2.29.3",
         "mongodb": "^4.6.0",
-        "toml": "^3.0.0"
+        "toml": "^3.0.0",
+        "uuid": "^8.3.2"
     }
 }
