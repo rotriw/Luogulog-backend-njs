@@ -3,6 +3,8 @@ const { Logger, shutdown } = require("log4js");
 const app = express();
 const isNumber = require("is-number");
 const { getDiscussData, getDiscussTitle } = require("../libs/show");
+const { vertifyToken } = require("../libs/user");
+const { findData } = require("../libs/search");
 
 app.get("/", (req, res) => {
 	res.json({ "info": "ok" });
@@ -37,6 +39,20 @@ app.get("/api/discuss/title/[0-9]{1,30}", async (req, res) => {
 app.get("/api/user/luogu/start", async (req, res) => {
 	const luoguv = require("../libs/luoguver")
 	res.json(await luoguv.startNewLoginRequest(newsession, config))
+})
+
+app.get("/api/discussList", async (req, res) => {
+	const showfb = require("../libs/showfb")
+	res.json(await showfb.newList(newsession, config, 15, 0))
+} )
+
+app.post("/api/user/vertify", async (req, res) => {
+	res.json(await vertifyToken(req.body.uid, req.body.token, newsession, config))
+})
+
+app.post("/api/data/find", async (req, res) => {
+	console.log(req.body.q);
+	res.json(await findData(req.body.q, newsession, config))
 })
 
 app.post("/api/user/luogu/vertify", async (req, res) => {

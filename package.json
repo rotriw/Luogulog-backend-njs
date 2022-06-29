@@ -20,6 +20,7 @@
         "minimist": "^1.2.6",
         "moment": "^2.29.3",
         "mongodb": "^4.6.0",
+        "sqlfile-loader": "^1.0.3",
         "toml": "^3.0.0",
         "uuid": "^8.3.2"
     }
