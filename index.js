@@ -42,9 +42,8 @@ try {
 		require("./module/web").run(config, loggerWeb, dbsession);
 	}
 	if (config.functions.autosave == true) {
-		require("./module/autosave").run(config, loggerSave, dbsession.db);
+		require("./module/autosave").run(config, loggerSave, dbsession.db.db(config.database.name));
 	}
-	let db = dbsession.db;
 	//await save.insert.insertAllPage(db, 134, config);
 	// save.update.updatePage(db, 4695, config);
 	//await autosave.savePages(db, config);

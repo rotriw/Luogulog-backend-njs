@@ -3,7 +3,7 @@ const axios = require("axios");
  * @param {require('mongodb').session} db
  */
 exports.startNewLoginRequest = async function (db, config) {
-	let dbs = await db.db(config.database.name);
+	let dbs = db;
 	let coll = await dbs.collection("userluoguv");
 	const { v4: uuidv4 } = require('uuid');
 	let strUUID = uuidv4() + uuidv4();
@@ -20,7 +20,7 @@ exports.startNewLoginRequest = async function (db, config) {
 };
 
 async function dealsDataWithLuogu(pasteData, userUID, db, config, callback) {
-	let dbs = db.db(config.database.name);
+	let dbs = db;
 	let coll = await dbs.collection("userluoguv");
 	let dbData = await coll.findOne({ "id": pasteData });
 	if (dbData == undefined) {

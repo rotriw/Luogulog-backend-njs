@@ -3,13 +3,11 @@ const save = require("./deal");
 const { insertAllPage } = require("./insert");
 const mongoC = require("mongodb").MongoClient;
 
-/**
- * @param {mongoC} db
- */
+
 exports.updatePage = async function (db, postID, config, logger) {
 	logger.info("Start Fetch " + postID);
 	
-	var dbo = db.db(config.database.name);
+	var dbo = db;
 	// 先来找找最后评论在哪里
 	var Dcoll = dbo.collection("discuss");
 	

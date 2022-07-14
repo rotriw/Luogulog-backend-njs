@@ -1,5 +1,5 @@
 exports.vertifyToken = async function (userid, token, db, config) {
-	let dbs = db.db(config.database.name);
+	let dbs = db;
 	let coll = await dbs.collection("usertoken");
 	let dbData = await coll.findOne({ "token": token });
 	if (dbData == undefined) {

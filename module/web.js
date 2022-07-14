@@ -20,7 +20,6 @@ app.all("*", (req, res, next) => {
 	res.header('Access-Control-Allow-Headers', '*');
 	res.header('Access-Control-Allow-Methods', '*');
 	res.header('Content-Type', 'application/json;charset=utf-8');
-	console.log("2333");
 	next();
 })
 
@@ -68,10 +67,9 @@ let times = 1;
  * @param {*} config 
  * @param {Logger} logger 
  */
-exports.run = function (configl, logger, session) {
-	let ports = configl.http.port || 3000;
-	newsession = session.db;
-	config = configl;
+exports.run = async function (config, logger, session) {
+	let ports = config.http.port || 3000;
+	newsession = await session.db.db(config.database.name);
 	app.listen(ports, () => {
 		logger.info("Start LuoguLO Backend Service Successful. Port:" + ports);
 	});

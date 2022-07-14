@@ -3,11 +3,10 @@ const deals = require("./deal");
 const mongoC = require("mongodb").MongoClient;
 
 /**
- * @param {mongoC} db
  * @summary 对一整个帖子进行爬
  */
 exports.insertAllPage = async function (db, postID, config) {
-	var dbo = db.db(config.database.name);
+	var dbo = db;
 	let val = await deals.getWholePageCommit(postID, config, true);
 	let collDiscuss = dbo.collection("discuss");
 	let collCommit = dbo.collection("commit");
