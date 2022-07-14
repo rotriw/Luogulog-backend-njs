@@ -67,7 +67,8 @@ let times = 1;
  * @param {*} config 
  * @param {Logger} logger 
  */
-exports.run = async function (config, logger, session) {
+exports.run = async function (configl, logger, session) {
+	config = configl;
 	let ports = config.http.port || 3000;
 	newsession = await session.db.db(config.database.name);
 	app.listen(ports, () => {
