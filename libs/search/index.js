@@ -5,7 +5,7 @@ const mongoC = require("mongodb").MongoClient;
  * @summary findData
  */
 exports.findData = async function (data, db, config) {
-	let dbs = await db.db(config.database.name);
+	let dbs = db;
 	let Dcoll = await dbs.collection("commit");
 	let Ccoll = await dbs.collection("discuss");
 	//先找discuss标题
@@ -18,7 +18,7 @@ exports.findData = async function (data, db, config) {
 };
 
 exports.findDataAccurate = async function (data, db, config) {
-	let dbs = await db.db(config.database.name);
+	let dbs = db;
 	let Dcoll = await dbs.collection("commit");
 	let Ccoll = await dbs.collection("discuss");
 	let getValue = data.number;
